@@ -1,10 +1,11 @@
 package com.heyaug.httpso;
 
+import android.util.Base64;
 import com.douyin.gorgon;
 import com.yanzhenjie.andserver.annotation.*;
 import com.yanzhenjie.andserver.framework.body.JsonBody;
 import com.yanzhenjie.andserver.http.HttpResponse;
-
+import com.yixia.utils.TinyEncode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,6 +43,24 @@ public class MyController {
             JSONObject headers = (JSONObject) bd.get("headers");
             return gorgon.getGorgon(url, JsonObjectToHashMap(headers));
         } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @ResponseBody
+    @PostMapping("/url")
+    String getNewGogonUrl(@RequestBody String body) {
+        return gorgon.getGorgon(body);
+    }
+
+    @ResponseBody
+    @PostMapping("/decode")
+    String mPai(@RequestBody String body) {
+        try {
+            byte[] data = Base64.decode(body, Base64.DEFAULT);
+            return TinyEncode.DecodeResult(data);
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
